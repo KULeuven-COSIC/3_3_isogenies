@@ -1,5 +1,5 @@
 # (3-3)-isogenies
-Magma code to efficiently compute chains of (3,3)-isogenies
+Magma and SageMath code to efficiently compute chains of (3,3)-isogenies
 
 The files in this folder contain the Magma code associated to the following paper by Thomas Decru and Sabrina Kunzweiler:
 (soon on eprint)
