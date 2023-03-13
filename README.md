@@ -16,3 +16,7 @@ The code can easily be adjusted to work for primes distinct from p = SIKEp751, b
 
 - The file uv_list.m are a short list of extra parameters to attack lower SIKE security levels.
 Some rely on integer factorizations which are not trivial hence we added them here since we computed them anyway.
+
+- The file verification_split.sage contains a script to verify that our splitting formulae are correct.
+
+- The file verification_glue.sage contains a script to verify that our gluing formulae are correct. This is done by showing that they are the dual of our splitting formulae.
