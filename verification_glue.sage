@@ -1,7 +1,7 @@
 """
  Verfication of the gluing formulae in "Efficient Computation of (3,3)-isogenies"
  
- Startegy: Here, we show that consecutively applying the gluing and splitting 
+ Startegy: Here, we show that applying the gluing and then the splitting 
  coincides with multiplication by 3 on E1 x E2.
  Since, we already showed that the splitting is correct, this verfies the correctness
  of the gluing formulae.
@@ -27,11 +27,11 @@ f_E2 = x^3 + 12*(2*b*c^2 - a*d)*x^2 +12*(16*b^2*c + 3*a^2)*Delta2*x + 512 * Delt
 #our splitting maps from Proposition 4
 def eval_splitting(xiP):
 	[xi0,xi1,xi2,xi3] = xiP
-	phi1x = (1/b)* ((6*a^3*c + 2/3*b^2*c - 1/2*a^2)*xi0^4 + (-40/3*a*b*c + 8/9*b)*xi0^3*xi1 + (48*a^3*c^2 + 48*b^2*c^2 - 10*a^2*c + 1/2*a)*xi0^2*xi1^2 + (96*a^3*c^3 + 96*b^2*c^3 - 2*a*c + 1/9)*xi1^4 + (-48*a^3*c^2 - 16*b^2*c^2 - 4*a^2*c + 2/3*a)*xi0^3*xi2 + ((72*a^4*c^2 + 120*a*b^2*c^2 - 12*a^3*c - 19/3*b^2*c + 1/2*a^2)/b)*xi0^2*xi1*xi2 + (-192*a^3*c^3 - 192*b^2*c^3 - 8*a^2*c^2 + 3*a*c - 1/12)*xi0*xi1^2*xi2 + ((288*a^4*c^3 + 288*a*b^2*c^3 - 36*a^3*c^2 - 12*b^2*c^2 + 1/12*a)/b)*xi1^3*xi2 + (96*a^3*c^3 + 96*b^2*c^3 + 64*a^2*c^2 - 9/2*a*c - 1/8)*xi0^2*xi2^2 + ((-288*a^4*c^3 - 288*a*b^2*c^3 + 48*a^3*c^2 + 8*b^2*c^2 - 2*a^2*c)/b)*xi0*xi1*xi2^2 + ((216*a^5*c^3 + 216*a^2*b^2*c^3 - 54*a^4*c^2 - 22*a*b^2*c^2 + 9/2*a^3*c + 1/3*b^2*c - 1/8*a^2)/b^2)*xi1^2*xi2^2 + (-96*a^2*c^3 - 12*a*c^2 + 5/3*c)*xi0*xi2^3 + ((-48*a^3*c^3 + 48*b^2*c^3 + 28*a^2*c^2 - 11/3*a*c + 5/36)/b)*xi1*xi2^3 + ((-72*a^4*c^3 + 24*a*b^2*c^3 + 18*a^3*c^2 - 2*b^2*c^2 - 3/2*a^2*c + 1/24*a)/b^2)*xi2^4 + 1/9*b*xi0^3*xi3 + 4/3*b*c*xi0*xi1^2*xi3 + (4/3*a*c - 1/9)*xi1^3*xi3 + (-8/3*b*c)*xi0^2*xi2*xi3 + (-4*a*c + 1/3)*xi0*xi1*xi2*xi3 + 16*b*c^2*xi0*xi2^2*xi3 + (16*a*c^2 - 4/3*c)*xi1*xi2^2*xi3 + ((16*a^2*c^2 - 8/3*a*c + 1/9)/b)*xi2^3*xi3);
-	phi1z = (xi0^2 + 4*c*(xi1^2 -xi0*xi2) -8*d*xi1*xi2)^2;
-	phi2x = - 32/b* ((a^2*b^2 - 16/3*b^4*c)*xi0^4 + (-3/2*a^3*b + 8/3*a*b^3*c - 10/9*b^3)*xi0^3*xi1 + (-4*a^2*b^2*c - 5/6*a*b^2)*xi0^3*xi2 - 8/9*b^3*xi0^3*xi3 + (9*a^2*b^2*c - 1/6*a*b^2 + 16*b^4*c^2)*xi0^2*xi1^2 + (9*a^3*b*c - 1/4*a^2*b + 16*a*b^3*c^2)*xi0^2*xi1*xi2 + 2/3*a*b^2*xi0^2*xi1*xi3 + (9/4*a^4*c - 3/16*a^3 + 4*a^2*b^2*c^2 + 3*a*b^2*c + 1/16*b^2)*xi0^2*xi2^2 - 1/2*a^2*b*xi0^2*xi2*xi3 + (-9*a^3*b*c + 3/8*a^2*b - 16*a*b^3*c^2 - 2/3*b^3*c)*xi0*xi1^3 + (-9/2*a^4*c + 3/8*a^3 - 8*a^2*b^2*c^2 - a*b^2*c + 1/24*b^2)*xi0*xi1^2*xi2 + (-15/4*a^2*b*c + 19/96*a*b - 4*b^3*c^2)*xi0*xi1*xi2^2 - 1/6*b^2*xi0*xi1*xi2*xi3 + (-3/8*a^3*c + 1/32*a^2 - 2*a*b^2*c^2 - 1/3*b^2*c)*xi0*xi2^3 + 1/12*a*b*xi0*xi2^2*xi3 + (9/4*a^4*c - 3/16*a^3 + 4*a^2*b^2*c^2 + 1/3*a*b^2*c - 1/18*b^2)*xi1^4 + 1/18*b^2*xi1^3*xi3 + (9/8*a^3*c - 3/32*a^2 + 2*a*b^2*c^2 - 1/4*b^2*c)*xi1^2*xi2^2 - 1/24*a*b*xi1^2*xi2*xi3 + (5/12*a*b*c - 1/36*b)*xi1*xi2^3 + (1/64*a^2*c - 1/768*a + 1/4*b^2*c^2)*xi2^4 - 1/288*b*xi2^3*xi3);
-	phi2z = (xi2^2  + 4*a*(xi1^2 -xi0*xi2)- 8*b*xi0*xi1)^2;
-	return [[phi1x,phi1z], [phi2x,phi2z]]
+	gx1 = (1/b)* ((6*a^3*c + 2/3*b^2*c - 1/2*a^2)*xi0^4 + (-40/3*a*b*c + 8/9*b)*xi0^3*xi1 + (48*a^3*c^2 + 48*b^2*c^2 - 10*a^2*c + 1/2*a)*xi0^2*xi1^2 + (96*a^3*c^3 + 96*b^2*c^3 - 2*a*c + 1/9)*xi1^4 + (-48*a^3*c^2 - 16*b^2*c^2 - 4*a^2*c + 2/3*a)*xi0^3*xi2 + ((72*a^4*c^2 + 120*a*b^2*c^2 - 12*a^3*c - 19/3*b^2*c + 1/2*a^2)/b)*xi0^2*xi1*xi2 + (-192*a^3*c^3 - 192*b^2*c^3 - 8*a^2*c^2 + 3*a*c - 1/12)*xi0*xi1^2*xi2 + ((288*a^4*c^3 + 288*a*b^2*c^3 - 36*a^3*c^2 - 12*b^2*c^2 + 1/12*a)/b)*xi1^3*xi2 + (96*a^3*c^3 + 96*b^2*c^3 + 64*a^2*c^2 - 9/2*a*c - 1/8)*xi0^2*xi2^2 + ((-288*a^4*c^3 - 288*a*b^2*c^3 + 48*a^3*c^2 + 8*b^2*c^2 - 2*a^2*c)/b)*xi0*xi1*xi2^2 + ((216*a^5*c^3 + 216*a^2*b^2*c^3 - 54*a^4*c^2 - 22*a*b^2*c^2 + 9/2*a^3*c + 1/3*b^2*c - 1/8*a^2)/b^2)*xi1^2*xi2^2 + (-96*a^2*c^3 - 12*a*c^2 + 5/3*c)*xi0*xi2^3 + ((-48*a^3*c^3 + 48*b^2*c^3 + 28*a^2*c^2 - 11/3*a*c + 5/36)/b)*xi1*xi2^3 + ((-72*a^4*c^3 + 24*a*b^2*c^3 + 18*a^3*c^2 - 2*b^2*c^2 - 3/2*a^2*c + 1/24*a)/b^2)*xi2^4 + 1/9*b*xi0^3*xi3 + 4/3*b*c*xi0*xi1^2*xi3 + (4/3*a*c - 1/9)*xi1^3*xi3 + (-8/3*b*c)*xi0^2*xi2*xi3 + (-4*a*c + 1/3)*xi0*xi1*xi2*xi3 + 16*b*c^2*xi0*xi2^2*xi3 + (16*a*c^2 - 4/3*c)*xi1*xi2^2*xi3 + ((16*a^2*c^2 - 8/3*a*c + 1/9)/b)*xi2^3*xi3);
+	gz1 = (xi0^2 + 4*c*(xi1^2 -xi0*xi2) -8*d*xi1*xi2)^2;
+	gx2 = - 32/b* ((a^2*b^2 - 16/3*b^4*c)*xi0^4 + (-3/2*a^3*b + 8/3*a*b^3*c - 10/9*b^3)*xi0^3*xi1 + (-4*a^2*b^2*c - 5/6*a*b^2)*xi0^3*xi2 - 8/9*b^3*xi0^3*xi3 + (9*a^2*b^2*c - 1/6*a*b^2 + 16*b^4*c^2)*xi0^2*xi1^2 + (9*a^3*b*c - 1/4*a^2*b + 16*a*b^3*c^2)*xi0^2*xi1*xi2 + 2/3*a*b^2*xi0^2*xi1*xi3 + (9/4*a^4*c - 3/16*a^3 + 4*a^2*b^2*c^2 + 3*a*b^2*c + 1/16*b^2)*xi0^2*xi2^2 - 1/2*a^2*b*xi0^2*xi2*xi3 + (-9*a^3*b*c + 3/8*a^2*b - 16*a*b^3*c^2 - 2/3*b^3*c)*xi0*xi1^3 + (-9/2*a^4*c + 3/8*a^3 - 8*a^2*b^2*c^2 - a*b^2*c + 1/24*b^2)*xi0*xi1^2*xi2 + (-15/4*a^2*b*c + 19/96*a*b - 4*b^3*c^2)*xi0*xi1*xi2^2 - 1/6*b^2*xi0*xi1*xi2*xi3 + (-3/8*a^3*c + 1/32*a^2 - 2*a*b^2*c^2 - 1/3*b^2*c)*xi0*xi2^3 + 1/12*a*b*xi0*xi2^2*xi3 + (9/4*a^4*c - 3/16*a^3 + 4*a^2*b^2*c^2 + 1/3*a*b^2*c - 1/18*b^2)*xi1^4 + 1/18*b^2*xi1^3*xi3 + (9/8*a^3*c - 3/32*a^2 + 2*a*b^2*c^2 - 1/4*b^2*c)*xi1^2*xi2^2 - 1/24*a*b*xi1^2*xi2*xi3 + (5/12*a*b*c - 1/36*b)*xi1*xi2^3 + (1/64*a^2*c - 1/768*a + 1/4*b^2*c^2)*xi2^4 - 1/288*b*xi2^3*xi3);
+	gz2 = (xi2^2  + 4*a*(xi1^2 -xi0*xi2)- 8*b*xi0*xi1)^2;
+	return [[gx1,gz1], [gx2,gz2]]
 
 #multiplication by 3 on the Kummer line of an elliptic curve y^2 = x^3 + a2*x^2 + a4*x + a6
 def times3(coef,P):
@@ -62,21 +62,26 @@ def JacToKummer(Div,F):
 #formulae from Proposition 5 (to be verified here)
 def eval_pullback_E1(P):
 	[x1,y1] = P
-	denA = (2*x1 - (12*c*b-16*d*a^2))^2 + a;
-	A1 = -4*(a*x1+8*d*Delta1);
-	A0 =  -8*(b*x1-6*c*Delta1);
-	B1 =  -2*y1*( (2*x1 + 4*(4*a^2*d - 3*b*c))^3 +  2*(3*a*x1 + 6*a*(4*a^2*d  - 3*b*c) + b));
-	B0 = -4*y1/a*(4*(a*x1 +  8*d*Delta1)^2 - Delta1);
-	return [x^2 + A1/denA *x + A0/denA, B1/denA^2*x + B0/denA^2]
+	alpha1 = x1 + 8*a^2*d-6*b*c
+	beta1 = a*x1+8*d*Delta1
+	gamma1 = 48*c*Delta1 - 8*b*x1
+	denominator1 = 4*alpha1^2 + a;
+	lambda11 = -4*beta1/denominator1;
+	lambda10 = gamma1/denominator1;
+	mu11 =  (4*alpha1^3 + 3*a*alpha1 + b)/denominator1^2
+	mu10 = (4*beta1^2-Delta1)/(a*denominator1^2)
+	return [x^2 + lambda11*x + lambda10, -4*y1*(mu11*x + mu10)]
 
 def eval_pullback_E2(Q):
 	[x2,y2] = Q
-	denC =  -8*(d*x2 - 2*(Delta2)*3*a);
-	C1 =  -4*(c*x2  + 8*b*Delta2);
-	C0 = (2*x2 + (16*b*c^2 - 12*a*d))^2 + c;
-	D1 =  16*y2*(Delta2); 
-	D0 =  -32*y2 * (4*Delta2*(3*a*(x2 + 4*b*c^2 -3*a*d) + b*c) - d*x2^2);
-	return [x^2 + C1/denC *x +  C0/denC, D1/denC^2*x + D0/denC^2]
+	alpha2 = x2 + 8*b*c^2-6*a*d
+	beta2 = c*x2 + 8*b*Delta2
+	gamma2 = 48*a*Delta2 - 8*d*x2
+	lambda21 =  -4*beta2/gamma2;
+	lambda20 = (4*alpha2^2 + c)/gamma2;
+	mu21 = -4*Delta2/gamma2^2;
+	mu20 = (16*Delta2*(2*b*c+3*a*(x2+alpha2))-8*d*x2^2)/gamma2^2;
+	return [x^2 + lambda21*x + lambda20, -4*y2*(mu21*x + mu20)]
 
 	
 ##############################################
@@ -106,13 +111,11 @@ Div1 = eval_pullback_E1([x1,y1])
 xiP = JacToKummer(Div1, F)
 [R2,aux1] = eval_splitting(xiP)
 
-
-
 #Restriction to E2:
 #apply gluing
 Div2 = eval_pullback_E2([x2,y2])
 #apply splitting
-xiQ = JacToKummer(C1/denC, C0/denC, D1/denC^2, D0/denC^2, F)
+xiQ = JacToKummer(Div2, F)
 [aux2,S2] = eval_splitting(xiQ)
 
 
