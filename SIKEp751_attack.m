@@ -11,6 +11,7 @@ p := 2^a*3^b - 1;
 Fp2<I> := GF(p, 2);
 R<x> := PolynomialRing(Fp2);
 
+
 // The following are needed as inverses for the BFT-evaluation formulae.
 INV2 := Fp2 ! 1/2; INV3 := Fp2 ! 1/3; INV4 := Fp2 ! 1/4; INV16 := Fp2 ! 1/16; INV216 := Fp2 ! 1/216; INV864 := Fp2 ! 1/864;
 INV103680 := Fp2 ! 1/103680; INV213408 := Fp2 ! 1/213408; INV13837824 := Fp2 ! 1/13837824; INV8115344640 := Fp2 ! 1/8115344640; INV327019680 := Fp2 ! 1/327019680;
@@ -219,9 +220,11 @@ function get_ABCD_transform(kernel,curves)
 	rel3 := [Knew! Numerator(el) : el in Coefficients(imP1[1] - imP2[1])];
 	rel4 := [Knew! Numerator(el) : el in Coefficients(imQ1[1] - imQ2[1])];
 	rel5 := [Knew! Numerator(el) : el in Coefficients(imP1[2] + imP2[2])];
-	rel6 := [Knew! Numerator(el) : el in Coefficients(imQ1[2] + imQ2[2])];;
-	
-	I := ideal<Knew | rel1 cat rel2 cat rel3 cat rel4 cat rel5 cat rel6>;
+	rel6 := [Knew! Numerator(el) : el in Coefficients(imQ1[2] + imQ2[2])];
+
+	rels := rel1 cat rel2 cat rel3 cat rel4 cat [rel5[2],rel6[2]];
+
+	I := ideal<Knew | rels>;
 	GB := GroebnerBasis(I);
 	a := -Coefficients(GB[3])[2];
 	b := -Coefficients(GB[4])[2];
@@ -318,8 +321,11 @@ function get_rst_transform(Ti)
 	H2 := x^2 + x + newr;
 	Hx2eval := Kx ! Numerator(Evaluate(Hx2,(x + b)/(c*x + d))*(c*x + d)^2);
 	I4 := [LeadingCoefficient(Hx2eval)*Eltseq(H2)[i] - Eltseq(Hx2eval)[i] : i in [1..2]];
-
 	I := Ideal(I0 cat I1 cat I2 cat I4);	// Yields quickest results on average
+//	"bleh"; Reverse(Sort(SetToSequence(SequenceToSet(&cat [Monomials(j) : j in I1 cat I2 cat I3 cat I4]))));
+	
+	
+	
 	GB := GroebnerBasis(I);
 	
 	r := -Coefficients(GB[1])[2];
@@ -335,6 +341,7 @@ function get_rst_transform(Ti)
 	return [r,s,t], [a,b,c,d,e];
 
 end function;
+
 
 
 function apply_transformation(transform, points, f, rst)
@@ -625,7 +632,7 @@ function get_ABCD_transform_split(f,kernel)
 	Inverse is xprime = (delta*x-beta)/(alpha-gamma*x) and yprime =(alpha*delta-beta*gamma)^3 y/((-gamma*x + alpha)^3*epsilon)
 	*/
 	newf := Kx ! (epsilon*Evaluate(f, (alpha*x+beta)/(gamma*x+delta))*(gamma*x+delta)^6);
-	rel1 := [12*a*c + 16*b*d -1, aux1*Delta1-1, aux2*Delta2-1];
+	rel1 := [aux1*Delta1-1, aux2*Delta2-1];
 	rel2 := Coefficients(newf - Fabcd);
 	/* Kernel condition*/
 	xx0 := gamma^2*x2 - gamma*alpha*x1 + alpha^2*x0;
@@ -638,9 +645,9 @@ function get_ABCD_transform_split(f,kernel)
 	rel4 := [yy0^2 + 4*c*(yy1^2-yy0*yy2) - 8*d*yy1*yy2, yy2^2 + 4*a*(yy1^2-yy0*yy2) - 8*b*yy0*yy1];
 	relations := [Knew ! Numerator(el): el in rel1 cat rel2 cat rel3 cat rel4];
 	/*
-	Note: rel 3 and rel4 are not needed, but the GB computation is faster with the information
+	Note: rel3 and rel4 are not needed, but the GB computation is faster with the information
 	*/
-    I := ideal<Knew |  relations>;
+	I := ideal<Knew |  relations[1..11] cat relations[13..13]>;
 	GB := GroebnerBasis(I);
 	c := 1; // We guess if c is a square or not.
 	rts := Roots(UnivariatePolynomial(Evaluate(GB[8],9,c)));
@@ -759,30 +766,23 @@ where we are not interested in the projection on X.
 The kernel of Alice's secret isogeny is then given by <Dual_phiA(PA_cod)> or <Dual_phiA(QA_cod)>, whichever has order 2^a.
 */
 
+
 /*
 Function to extend Alice's isogeny by an arbitrary isogeny of degree 10.
+There is rational 10-torsion on the twist which allows us to exploit x-only arithmetic over Fp2.
 */
 
 function extend_phi(EA, phiPB, phiQB)
-	_, tor2 := HasRoot(DivisionPolynomial(EA,2));
-	EA_ext2, phi2 := IsogenyFromKernel(EA, x-tor2);
-	phi2_PB := phi2(phiPB); phi2_QB := phi2(phiQB);
-	/*
-	The x-coordinates of divpol live in Fp2 but their y-coordinates not.
-	The easiest way to find a kernel polynomial is by naively trying to match linear factors of the division polynomial.
-	*/
-	divpol5 := DivisionPolynomial(EA_ext2,5);
-	facs := [f[1] : f in Factorisation(divpol5)];
-	found := false; i := 2;
-	while not found do
-		kernel_pol := facs[1]*facs[i];
-		try EA_ext10, phi5 := IsogenyFromKernel(EA_ext2, kernel_pol); found := true; catch e; end try;
-		i +:= 1;
-	end while;
-	phi10_PB := phi5(phi2_PB);
-	phi10_QB := phi5(phi2_QB);
+
+	Etwist := QuadraticTwist(EA,NSQ);
+	repeat P10 := (((p-1) div 10)*Random(Etwist)); until Etwist ! 0 notin {2*P10,5*P10};
+	EA_ext10, phi10 := IsogenyFromKernel(EA, &*[x-(i*P10)[1]/NSQ : i in [1..5]]);
+	phi10_PB := phi10(phiPB);
+	phi10_QB := phi10(phiQB);
+	
 	return EA_ext10, phi10_PB, phi10_QB;
 end function;
+
 
 /*
 Computing (10*2^a*PB, -phi_extPB), (10*2^a*QB, -phi_extQB) and renaming it (R1,S1) and (R2,S2);
